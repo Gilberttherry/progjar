@@ -4,7 +4,7 @@ import time
 
 CLIENT_IP = "127.0.0.2"
 PORT = 9000
-NAMAFILE= "/new_%s"
+NAMAFILE= "new_%s"
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -17,14 +17,13 @@ while True:
         print "nama file :", data
         file_name = NAMAFILE % data
 
-    f = open(file_name, 'wb+')
-
+    f = open(NAMAFILE % data, 'wb+')
     while True:
         ready = select.select([sock], [], [], 10)
         if ready[0]:
-            data, addr = sock.recvfrom(8192)
+            data, addr = sock.recvfrom(20480)
             f.write(data)
         else:
             print "file %s telah diterima" % file_name
             f.close()
-break
+	break
