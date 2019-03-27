@@ -32,6 +32,9 @@ class a:
 
                 
     def parseRequest(self, request):
+		#List
+        if request[:4] == "list":
+            self.sendList()
 		#request
         if request[:3] == "req":
             self.reqfile(request[4:].rstrip())
@@ -40,6 +43,19 @@ class a:
             self.krmfile(request[6:].rstrip())
         else:
             self.send("[ERR] File Tidak Ada")
+	
+    def send(self, packet):
+        self.conn.send(packet.ljust(1024))
+
+    def recv(self):
+        return self.conn.recv(1024)
+
+    def sendList(self):
+        files = os.listdir(self.cwd)
+        res = ""
+        for file in files:
+            res += file + "\n"
+        self.send(res)
 
     def krmfile(self, fileName):
         fp = open(fileName, "wb+")
@@ -87,12 +103,6 @@ class a:
             self.send(data)
         self.send("Sended")
 
-	
-    def send(self, packet):
-        self.conn.send(packet.ljust(1024))
-
-    def recv(self):
-        return self.conn.recv(1024)
 
 
 while True:

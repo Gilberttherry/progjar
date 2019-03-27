@@ -8,7 +8,7 @@ SERVER_IP = "127.0.0.1"
 
 class ClientConnection:
     def __init__(self, conn):
-        print "command : kirim 'nama' dan req 'nama'"
+        print "command : ls, kirim 'nama' dan req 'nama'"
         self.conn = conn
         connInfo = conn.getsockname()
         print "Connected to " + str(connInfo[0]) + ":" + str(connInfo[1])
@@ -25,6 +25,9 @@ class ClientConnection:
             self.krmfile(request[6:])
         elif request[:3] == "req":
             self.reqfile(request[4:])
+        elif request[:3] == "ls":
+            self.send("list")
+            print self.recv().rstrip()
         else:
             self.send("$")
             print self.recv().rstrip()
